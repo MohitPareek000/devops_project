@@ -60,11 +60,11 @@ const ThreatsPage: React.FC = () => {
     if (!confirm('Are you sure you want to delete this scan?')) return;
 
     try {
-      // In a real app, you'd call the delete API
-      toast.success('Scan deleted');
+      await urlAPI.deleteScan(id);
+      toast.success('Scan deleted successfully');
       fetchThreats();
-    } catch {
-      toast.error('Failed to delete scan');
+    } catch (error: any) {
+      toast.error(error.response?.data?.detail || 'Failed to delete scan');
     }
   };
 

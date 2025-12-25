@@ -86,6 +86,7 @@ export const urlAPI = {
   getScan: (id: number) => api.get(`/urls/scans/${id}`),
   updateStatus: (id: number, status: string) =>
     api.patch(`/urls/scans/${id}/status`, null, { params: { new_status: status } }),
+  deleteScan: (id: number) => api.delete(`/urls/scans/${id}`),
   getStats: (days?: number) => api.get('/urls/stats', { params: { days } }),
 };
 

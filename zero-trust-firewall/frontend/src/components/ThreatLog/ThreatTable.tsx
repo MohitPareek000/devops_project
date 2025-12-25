@@ -22,10 +22,10 @@ interface ThreatTableProps {
 const ThreatTable: React.FC<ThreatTableProps> = ({ threats, onView, onDelete }) => {
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
-      active: 'bg-blue-900/50 text-blue-400 border-blue-800',
-      blocked: 'bg-red-900/50 text-red-400 border-red-800',
-      resolved: 'bg-green-900/50 text-green-400 border-green-800',
-      false_positive: 'bg-gray-900/50 text-gray-400 border-gray-700',
+      active: 'bg-blue-100 text-blue-700 border-blue-200',
+      blocked: 'bg-red-100 text-red-700 border-red-200',
+      resolved: 'bg-green-100 text-green-700 border-green-200',
+      false_positive: 'bg-gray-100 text-gray-700 border-gray-200',
     };
     return styles[status] || styles.active;
   };
@@ -44,10 +44,10 @@ const ThreatTable: React.FC<ThreatTableProps> = ({ threats, onView, onDelete }) 
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-dark-700">
+        <tbody className="divide-y divide-gray-200">
           {threats.length === 0 ? (
             <tr>
-              <td colSpan={7} className="text-center py-8 text-dark-400">
+              <td colSpan={7} className="text-center py-8 text-gray-500">
                 No threats found
               </td>
             </tr>
@@ -56,8 +56,8 @@ const ThreatTable: React.FC<ThreatTableProps> = ({ threats, onView, onDelete }) 
               <tr key={threat.id}>
                 <td>
                   <div>
-                    <p className="font-medium text-white">{threat.domain}</p>
-                    <p className="text-dark-400 text-xs mt-1">
+                    <p className="font-medium text-gray-900">{threat.domain}</p>
+                    <p className="text-gray-500 text-xs mt-1">
                       {truncateUrl(threat.url, 50)}
                     </p>
                   </div>
@@ -65,7 +65,7 @@ const ThreatTable: React.FC<ThreatTableProps> = ({ threats, onView, onDelete }) 
                 <td>
                   <span
                     className={`inline-flex items-center gap-1 ${
-                      threat.is_phishing ? 'text-red-400' : 'text-green-400'
+                      threat.is_phishing ? 'text-red-600' : 'text-green-600'
                     }`}
                   >
                     <div
@@ -78,7 +78,7 @@ const ThreatTable: React.FC<ThreatTableProps> = ({ threats, onView, onDelete }) 
                 </td>
                 <td>
                   <div className="flex items-center gap-2">
-                    <div className="w-16 h-1.5 bg-dark-700 rounded-full overflow-hidden">
+                    <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                       <div
                         className={`h-full rounded-full ${
                           threat.is_phishing ? 'bg-red-500' : 'bg-green-500'
@@ -86,7 +86,7 @@ const ThreatTable: React.FC<ThreatTableProps> = ({ threats, onView, onDelete }) 
                         style={{ width: `${threat.confidence_score * 100}%` }}
                       />
                     </div>
-                    <span className="text-dark-300 text-sm">
+                    <span className="text-gray-600 text-sm">
                       {(threat.confidence_score * 100).toFixed(0)}%
                     </span>
                   </div>
@@ -105,12 +105,12 @@ const ThreatTable: React.FC<ThreatTableProps> = ({ threats, onView, onDelete }) 
                     {threat.status.replace('_', ' ')}
                   </span>
                 </td>
-                <td className="text-dark-300">{formatDate(threat.scanned_at)}</td>
+                <td className="text-gray-600">{formatDate(threat.scanned_at)}</td>
                 <td>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => onView(threat)}
-                      className="p-1.5 text-dark-400 hover:text-white hover:bg-dark-700 rounded-lg transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
                       title="View details"
                     >
                       <Eye className="w-4 h-4" />
@@ -119,7 +119,7 @@ const ThreatTable: React.FC<ThreatTableProps> = ({ threats, onView, onDelete }) 
                       href={threat.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-1.5 text-dark-400 hover:text-white hover:bg-dark-700 rounded-lg transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
                       title="Open URL"
                     >
                       <ExternalLink className="w-4 h-4" />
@@ -127,7 +127,7 @@ const ThreatTable: React.FC<ThreatTableProps> = ({ threats, onView, onDelete }) 
                     {onDelete && (
                       <button
                         onClick={() => onDelete(threat.id)}
-                        className="p-1.5 text-dark-400 hover:text-red-400 hover:bg-dark-700 rounded-lg transition-colors"
+                        className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-gray-100 rounded-lg transition-colors"
                         title="Delete"
                       >
                         <Trash2 className="w-4 h-4" />
