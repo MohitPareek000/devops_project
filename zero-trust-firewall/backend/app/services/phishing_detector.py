@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 import tldextract
 
 from .url_analyzer import url_analyzer
-from .rule_engine import rule_engine
 from .ml_detector import ml_detector
 from .bert_detector import bert_detector
 from .threat_intel import threat_intel
@@ -13,16 +12,12 @@ from app.core.config import settings
 
 
 class PhishingDetector:
-    """Main phishing detection orchestrator combining ML, BERT, rules, and threat intel."""
+    """Main phishing detection orchestrator combining BERT and ML detection."""
 
     def __init__(self):
-        # Hybrid weights for combining all detection methods
-        # BERT/Deep Learning: Best for semantic understanding and typosquatting
-        # RandomForest ML: Good for statistical patterns
-        # Rules: Deterministic detection of known patterns
-        self.bert_weight = 0.35  # Deep learning score
-        self.ml_weight = 0.25   # Traditional ML score
-        self.rule_weight = 0.40  # Rule-based score (highest for reliability)
+        # Hybrid weights: 50% BERT + 50% RandomForest ML
+        self.bert_weight = 0.50  # Deep learning score
+        self.ml_weight = 0.50   # Traditional ML score
 
     def analyze_url(
         self,
@@ -50,11 +45,10 @@ class PhishingDetector:
                 is_phishing=False,
                 confidence_score=0.0,
                 ml_score=0.0,
-                rule_score=0.0,
+                bert_score=0.0,
                 severity='info',
                 status='active',
                 features={},
-                matched_rules=[],
                 verdict='safe',
                 reason='Domain is whitelisted'
             )
@@ -70,12 +64,10 @@ class PhishingDetector:
                 is_phishing=True,
                 confidence_score=1.0,
                 ml_score=1.0,
-                rule_score=1.0,
                 bert_score=1.0,
                 severity='critical',
                 status='blocked',
                 features={},
-                matched_rules=[{'name': 'Blacklist Match', 'severity': 'critical'}],
                 verdict='malicious',
                 reason='Domain found in threat intelligence blacklist'
             )
@@ -87,47 +79,18 @@ class PhishingDetector:
         # Extract features
         feature_vector, features = url_analyzer.get_feature_vector(url)
 
-        # Run all detection methods
+        # Run detection methods: BERT + ML (no rule-based)
         ml_result = ml_detector.predict(url)
         bert_result = bert_detector.predict(url)
-        rule_result = rule_engine.analyze(url, features)
 
-        # Hybrid scoring: Combine all three methods
+        # Hybrid scoring: 50% BERT + 50% ML
         combined_score = (
             bert_result['combined_score'] * self.bert_weight +
-            ml_result['ml_score'] * self.ml_weight +
-            rule_result['rule_score'] * self.rule_weight
+            ml_result['ml_score'] * self.ml_weight
         )
 
-        # Check for critical-severity rules that should override the normal scoring
-        # Critical rules like typosquatting should automatically flag as phishing
-        critical_rules_matched = [
-            r for r in rule_result.get('matched_rules', [])
-            if r.get('severity') == 'critical'
-        ]
-
-        # Check for high-severity rules that should boost the score
-        high_severity_rules = [
-            r for r in rule_result.get('matched_rules', [])
-            if r.get('severity') == 'high'
-        ]
-
-        # If any critical rule matched, override the score and mark as phishing
-        if critical_rules_matched:
-            # Critical rules = definite phishing
-            combined_score = max(combined_score, 0.85)
-            is_phishing = True
-        elif high_severity_rules and len(high_severity_rules) >= 2:
-            # Multiple high-severity rules = likely phishing
-            combined_score = max(combined_score, 0.65)
-            is_phishing = True
-        elif high_severity_rules:
-            # Single high-severity rule = boost score but use threshold
-            combined_score = max(combined_score, 0.55)
-            is_phishing = combined_score >= 0.45
-        else:
-            # Determine if phishing based on normal threshold (lowered for better catch rate)
-            is_phishing = combined_score >= 0.45
+        # Determine if phishing based on threshold
+        is_phishing = combined_score >= 0.5
 
         # Determine severity based on score
         if combined_score >= 0.8:
@@ -162,15 +125,14 @@ class PhishingDetector:
             is_phishing=is_phishing,
             confidence_score=combined_score,
             ml_score=ml_result['ml_score'],
-            rule_score=rule_result['rule_score'],
+            bert_score=bert_result['combined_score'],
             severity=severity,
             status=status,
             features=features,
-            matched_rules=rule_result['matched_rules'],  # Pass full rule objects
             verdict=verdict,
             reason=reason,
             ml_details=ml_result,
-            rule_details=rule_result
+            bert_details=bert_result
         )
 
         # Save to database
@@ -191,15 +153,14 @@ class PhishingDetector:
         is_phishing: bool,
         confidence_score: float,
         ml_score: float,
-        rule_score: float,
+        bert_score: float,
         severity: str,
         status: str,
         features: Dict,
-        matched_rules: list,
         verdict: str,
         reason: str,
         ml_details: Optional[Dict] = None,
-        rule_details: Optional[Dict] = None
+        bert_details: Optional[Dict] = None
     ) -> Dict[str, Any]:
         """Create standardized result dictionary."""
         return {
@@ -208,15 +169,18 @@ class PhishingDetector:
             'is_phishing': is_phishing,
             'confidence_score': round(confidence_score, 4),
             'ml_score': round(ml_score, 4),
-            'rule_score': round(rule_score, 4),
+            'bert_score': round(bert_score, 4),
             'severity': severity,
             'status': status,
             'features': features,
-            'matched_rules': matched_rules,
             'verdict': verdict,
             'reason': reason,
             'ml_details': ml_details,
-            'rule_details': rule_details,
+            'bert_details': bert_details,
+            'detection_weights': {
+                'bert': 0.50,
+                'ml': 0.50
+            },
             'scanned_at': datetime.utcnow().isoformat()
         }
 
@@ -235,11 +199,11 @@ class PhishingDetector:
             is_phishing=result['is_phishing'],
             confidence_score=result['confidence_score'],
             ml_score=result['ml_score'],
-            rule_score=result['rule_score'],
+            rule_score=0.0,  # No longer using rule-based detection
             severity=result['severity'],
             status=result['status'],
             features=result['features'],
-            matched_rules=result['matched_rules'],
+            matched_rules=[],  # No longer using rule-based detection
             user_id=user_id,
             source_ip=source_ip,
             user_agent=user_agent
@@ -268,7 +232,8 @@ class PhishingDetector:
             alert_metadata={
                 'url': result['url'],
                 'confidence_score': result['confidence_score'],
-                'matched_rules': result['matched_rules']
+                'bert_score': result['bert_score'],
+                'ml_score': result['ml_score']
             }
         )
         db.add(alert)

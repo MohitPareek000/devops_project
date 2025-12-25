@@ -55,6 +55,13 @@ class CharacterLevelModel:
             r'app[l1]e': ('apple mimicking', 0.7),
             r'netf[l1]ix': ('netflix mimicking', 0.7),
             r'linked[l1]n': ('linkedin mimicking', 0.6),
+            r'hotmai[l1i]': ('hotmail mimicking', 0.7),  # hotmaii, hotmai1, hotmail typos
+            r'hotma[l1i]{2}': ('hotmail mimicking', 0.7),  # hotmall, hotma11, etc.
+            r'outl[o0]{2}k': ('outlook mimicking', 0.7),
+            r'yah[o0]{2}': ('yahoo mimicking', 0.7),
+            r'twitt[e3]r': ('twitter mimicking', 0.6),
+            r'instag[r]?am': ('instagram mimicking', 0.6),
+            r'whatsap+': ('whatsapp mimicking', 0.6),
 
             # Suspicious TLDs in path
             r'\.(xyz|tk|ml|ga|cf|gq|top|loan|work|click)': ('suspicious tld', 0.5),
@@ -282,7 +289,8 @@ class BERTPhishingDetector:
 
         # Check for brand names in unusual positions
         brands = ['google', 'amazon', 'paypal', 'microsoft', 'apple', 'facebook',
-                  'netflix', 'linkedin', 'twitter', 'instagram', 'chase', 'wellsfargo']
+                  'netflix', 'linkedin', 'twitter', 'instagram', 'chase', 'wellsfargo',
+                  'hotmail', 'outlook', 'yahoo', 'whatsapp', 'telegram', 'snapchat']
 
         for token in tokens:
             token_lower = token.lower()
