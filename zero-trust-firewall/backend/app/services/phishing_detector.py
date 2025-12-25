@@ -15,8 +15,10 @@ class PhishingDetector:
     """Main phishing detection orchestrator combining ML, rules, and threat intel."""
 
     def __init__(self):
-        self.ml_weight = 0.6
-        self.rule_weight = 0.4
+        # Adjusted weights: Rules are more reliable for pattern-based attacks
+        # ML is better for catching novel patterns
+        self.ml_weight = 0.45
+        self.rule_weight = 0.55
 
     def analyze_url(
         self,
@@ -92,8 +94,35 @@ class PhishingDetector:
             rule_result['rule_score'] * self.rule_weight
         )
 
-        # Determine if phishing
-        is_phishing = combined_score >= 0.5
+        # Check for critical-severity rules that should override the normal scoring
+        # Critical rules like typosquatting should automatically flag as phishing
+        critical_rules_matched = [
+            r for r in rule_result.get('matched_rules', [])
+            if r.get('severity') == 'critical'
+        ]
+
+        # Check for high-severity rules that should boost the score
+        high_severity_rules = [
+            r for r in rule_result.get('matched_rules', [])
+            if r.get('severity') == 'high'
+        ]
+
+        # If any critical rule matched, override the score and mark as phishing
+        if critical_rules_matched:
+            # Critical rules = definite phishing
+            combined_score = max(combined_score, 0.85)
+            is_phishing = True
+        elif high_severity_rules and len(high_severity_rules) >= 2:
+            # Multiple high-severity rules = likely phishing
+            combined_score = max(combined_score, 0.65)
+            is_phishing = True
+        elif high_severity_rules:
+            # Single high-severity rule = boost score but use threshold
+            combined_score = max(combined_score, 0.55)
+            is_phishing = combined_score >= 0.45
+        else:
+            # Determine if phishing based on normal threshold (lowered for better catch rate)
+            is_phishing = combined_score >= 0.45
 
         # Determine severity based on score
         if combined_score >= 0.8:
@@ -132,7 +161,7 @@ class PhishingDetector:
             severity=severity,
             status=status,
             features=features,
-            matched_rules=[r['name'] for r in rule_result['matched_rules']],
+            matched_rules=rule_result['matched_rules'],  # Pass full rule objects
             verdict=verdict,
             reason=reason,
             ml_details=ml_result,
@@ -231,7 +260,7 @@ class PhishingDetector:
             source='URL Scanner',
             url_scan_id=scan.id,
             user_id=user_id,
-            metadata={
+            alert_metadata={
                 'url': result['url'],
                 'confidence_score': result['confidence_score'],
                 'matched_rules': result['matched_rules']

@@ -28,6 +28,13 @@ class URLScanBatchRequest(BaseModel):
     urls: List[str] = Field(..., min_items=1, max_items=100)
 
 
+class MatchedRule(BaseModel):
+    name: str
+    score: float
+    severity: str
+    reason: str
+
+
 class URLFeatures(BaseModel):
     url_length: int
     domain_length: int
@@ -57,7 +64,7 @@ class URLScanResponse(BaseModel):
     severity: str
     status: str
     features: Optional[Dict[str, Any]]
-    matched_rules: Optional[List[str]]
+    matched_rules: Optional[List[Any]]  # Can be MatchedRule dict or legacy string
     scanned_at: datetime
 
     class Config:
@@ -152,11 +159,12 @@ class AlertResponse(BaseModel):
     is_read: bool
     is_acknowledged: bool
     acknowledged_at: Optional[datetime]
-    metadata: Optional[Dict[str, Any]]
+    metadata: Optional[Dict[str, Any]] = Field(default=None, alias="alert_metadata")
     created_at: datetime
 
     class Config:
         from_attributes = True
+        populate_by_name = True
 
 
 class AlertUpdate(BaseModel):

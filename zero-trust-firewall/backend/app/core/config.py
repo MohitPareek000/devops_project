@@ -13,8 +13,8 @@ class Settings(BaseSettings):
     HOST: str = "0.0.0.0"
     PORT: int = 8000
 
-    # Database
-    DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/zerotrust_db"
+    # Database (SQLite for local dev, PostgreSQL for production)
+    DATABASE_URL: str = "sqlite:///./zerotrust.db"
 
     # Security
     SECRET_KEY: str = secrets.token_urlsafe(32)

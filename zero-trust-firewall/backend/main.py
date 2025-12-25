@@ -29,7 +29,7 @@ async def lifespan(app: FastAPI):
         admin = db.query(User).filter(User.username == "admin").first()
         if not admin:
             admin = User(
-                email="admin@zerotrust.local",
+                email="admin@zerotrust.example.com",
                 username="admin",
                 full_name="System Administrator",
                 hashed_password=get_password_hash("admin123"),

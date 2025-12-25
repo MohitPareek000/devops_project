@@ -237,22 +237,25 @@ async def get_bandwidth_stats(
     """Get bandwidth statistics over time."""
     start_time = datetime.utcnow() - timedelta(hours=hours)
 
+    # Use strftime for SQLite compatibility
+    hour_expr = func.strftime('%Y-%m-%d %H:00:00', NetworkConnection.timestamp)
+
     results = db.query(
-        func.date_trunc('hour', NetworkConnection.timestamp).label('hour'),
+        hour_expr.label('hour'),
         func.sum(NetworkConnection.bytes_sent).label('bytes_sent'),
         func.sum(NetworkConnection.bytes_received).label('bytes_received'),
         func.count(NetworkConnection.id).label('connections')
     ).filter(
         NetworkConnection.timestamp >= start_time
     ).group_by(
-        func.date_trunc('hour', NetworkConnection.timestamp)
+        hour_expr
     ).order_by(
-        func.date_trunc('hour', NetworkConnection.timestamp)
+        hour_expr
     ).all()
 
     return [
         {
-            'timestamp': str(r.hour),
+            'timestamp': r.hour,
             'bytes_sent': r.bytes_sent or 0,
             'bytes_received': r.bytes_received or 0,
             'connections': r.connections

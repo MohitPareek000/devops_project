@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
-from sqlalchemy import func, desc
+from sqlalchemy import func, desc, case, Integer
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -106,11 +106,11 @@ async def get_threat_trends(
     """Get threat trends over time."""
     start_date = datetime.utcnow() - timedelta(days=days)
 
-    # Get daily data
+    # Get daily data - use case for cross-database compatibility
     results = db.query(
         func.date(URLScan.scanned_at).label('date'),
         func.count(URLScan.id).label('total'),
-        func.sum(func.cast(URLScan.is_phishing, db.bind.dialect.name == 'postgresql' and 'INTEGER' or None)).label('phishing')
+        func.sum(case((URLScan.is_phishing == True, 1), else_=0)).label('phishing')
     ).filter(
         URLScan.scanned_at >= start_date
     ).group_by(
@@ -188,26 +188,26 @@ async def get_activity_timeline(
     """Get activity timeline by hour."""
     start_time = datetime.utcnow() - timedelta(hours=hours)
 
-    # URL Scans by hour
+    # URL Scans by hour - simplified for SQLite compatibility
     scan_results = db.query(
-        func.date_trunc('hour', URLScan.scanned_at).label('hour'),
+        func.strftime('%Y-%m-%d %H:00', URLScan.scanned_at).label('hour'),
         func.count(URLScan.id).label('scans'),
-        func.sum(func.cast(URLScan.is_phishing, db.bind.dialect.name == 'postgresql' and 'INTEGER' or None)).label('threats')
+        func.sum(case((URLScan.is_phishing == True, 1), else_=0)).label('threats')
     ).filter(
         URLScan.scanned_at >= start_time
     ).group_by(
-        func.date_trunc('hour', URLScan.scanned_at)
+        func.strftime('%Y-%m-%d %H:00', URLScan.scanned_at)
     ).all()
 
     # Network connections by hour
     network_results = db.query(
-        func.date_trunc('hour', NetworkConnection.timestamp).label('hour'),
+        func.strftime('%Y-%m-%d %H:00', NetworkConnection.timestamp).label('hour'),
         func.count(NetworkConnection.id).label('connections'),
-        func.sum(func.cast(NetworkConnection.is_blocked, db.bind.dialect.name == 'postgresql' and 'INTEGER' or None)).label('blocked')
+        func.sum(case((NetworkConnection.is_blocked == True, 1), else_=0)).label('blocked')
     ).filter(
         NetworkConnection.timestamp >= start_time
     ).group_by(
-        func.date_trunc('hour', NetworkConnection.timestamp)
+        func.strftime('%Y-%m-%d %H:00', NetworkConnection.timestamp)
     ).all()
 
     # Combine data

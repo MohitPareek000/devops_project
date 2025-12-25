@@ -114,11 +114,10 @@ class Alert(Base):
     is_acknowledged = Column(Boolean, default=False)
     acknowledged_by = Column(Integer, ForeignKey("users.id"), nullable=True)
     acknowledged_at = Column(DateTime(timezone=True))
-    metadata = Column(JSON)
+    alert_metadata = Column(JSON)
 
     # Relations
     user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
-    user = relationship("User", back_populates="alerts", foreign_keys=[user_id])
     url_scan_id = Column(Integer, ForeignKey("url_scans.id"), nullable=True)
     network_connection_id = Column(Integer, ForeignKey("network_connections.id"), nullable=True)
 

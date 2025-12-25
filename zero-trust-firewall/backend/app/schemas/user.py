@@ -27,8 +27,11 @@ class UserUpdate(BaseModel):
     is_active: Optional[bool] = None
 
 
-class UserResponse(UserBase):
+class UserResponse(BaseModel):
     id: int
+    email: str
+    username: str
+    full_name: Optional[str] = None
     role: str
     is_active: bool
     is_verified: bool

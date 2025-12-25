@@ -28,7 +28,6 @@ class User(Base):
 
     # Relationships
     url_scans = relationship("URLScan", back_populates="user")
-    alerts = relationship("Alert", back_populates="user")
 
     def __repr__(self):
         return f"<User {self.username}>"

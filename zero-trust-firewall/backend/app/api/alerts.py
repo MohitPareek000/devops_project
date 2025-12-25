@@ -238,7 +238,7 @@ async def create_alert(
         severity=alert_data.severity.value,
         alert_type=alert_data.alert_type,
         source=alert_data.source or "Manual",
-        metadata=alert_data.metadata,
+        alert_metadata=alert_data.metadata,
         user_id=current_user.id
     )
 

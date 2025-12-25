@@ -4,6 +4,13 @@ import { urlAPI } from '../../services/api';
 import toast from 'react-hot-toast';
 import { getSeverityBadgeClass, getSeverityColor } from '../../utils/helpers';
 
+interface MatchedRule {
+  name: string;
+  score: number;
+  severity: string;
+  reason: string;
+}
+
 interface ScanResult {
   url: string;
   domain: string;
@@ -14,8 +21,8 @@ interface ScanResult {
   severity: string;
   verdict: string;
   reason: string;
-  matched_rules: string[];
   features: Record<string, any>;
+  matched_rules: MatchedRule[];
 }
 
 const URLScanner: React.FC = () => {
@@ -155,7 +162,7 @@ const URLScanner: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="card">
               <h4 className="text-dark-400 text-sm font-medium mb-2">
-                Overall Confidence
+                Combined Score
               </h4>
               <div className="flex items-end gap-2">
                 <span className={`text-3xl font-bold ${getSeverityColor(result.severity)}`}>
@@ -170,10 +177,11 @@ const URLScanner: React.FC = () => {
                   style={{ width: `${result.confidence_score * 100}%` }}
                 />
               </div>
+              <p className="text-dark-500 text-xs mt-2">ML (45%) + Rules (55%)</p>
             </div>
 
             <div className="card">
-              <h4 className="text-dark-400 text-sm font-medium mb-2">ML Score</h4>
+              <h4 className="text-dark-400 text-sm font-medium mb-2">ML Detection Score</h4>
               <div className="flex items-end gap-2">
                 <span className="text-3xl font-bold text-blue-400">
                   {(result.ml_score * 100).toFixed(1)}%
@@ -185,10 +193,11 @@ const URLScanner: React.FC = () => {
                   style={{ width: `${result.ml_score * 100}%` }}
                 />
               </div>
+              <p className="text-dark-500 text-xs mt-2">Pattern-based ML model</p>
             </div>
 
             <div className="card">
-              <h4 className="text-dark-400 text-sm font-medium mb-2">Rule Score</h4>
+              <h4 className="text-dark-400 text-sm font-medium mb-2">Rule Detection Score</h4>
               <div className="flex items-end gap-2">
                 <span className="text-3xl font-bold text-purple-400">
                   {(result.rule_score * 100).toFixed(1)}%
@@ -200,23 +209,58 @@ const URLScanner: React.FC = () => {
                   style={{ width: `${result.rule_score * 100}%` }}
                 />
               </div>
+              <p className="text-dark-500 text-xs mt-2">{result.matched_rules?.length || 0} rules matched</p>
             </div>
           </div>
 
-          {/* Matched Rules */}
+          {/* Matched Detection Rules */}
           {result.matched_rules && result.matched_rules.length > 0 && (
             <div className="card">
-              <h4 className="text-lg font-semibold text-white mb-4">
-                Matched Detection Rules
-              </h4>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex items-center gap-2 mb-4">
+                <AlertTriangle className="w-5 h-5 text-purple-400" />
+                <h4 className="text-lg font-semibold text-white">Matched Detection Rules</h4>
+                <span className="text-dark-400 text-sm">({result.matched_rules.length} rules)</span>
+              </div>
+              <div className="space-y-3">
                 {result.matched_rules.map((rule, index) => (
-                  <span
+                  <div
                     key={index}
-                    className="px-3 py-1.5 bg-orange-900/30 border border-orange-800 text-orange-400 rounded-lg text-sm"
+                    className="flex items-start gap-3 bg-dark-900 rounded-lg p-3"
                   >
-                    {rule}
-                  </span>
+                    <div
+                      className={`w-2 h-2 rounded-full mt-2 ${
+                        rule.severity === 'critical'
+                          ? 'bg-red-500'
+                          : rule.severity === 'high'
+                          ? 'bg-orange-500'
+                          : rule.severity === 'medium'
+                          ? 'bg-yellow-500'
+                          : 'bg-blue-500'
+                      }`}
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-white font-medium">{rule.name}</span>
+                        <span
+                          className={`text-xs px-2 py-0.5 rounded-full ${
+                            rule.severity === 'critical'
+                              ? 'bg-red-900/50 text-red-400'
+                              : rule.severity === 'high'
+                              ? 'bg-orange-900/50 text-orange-400'
+                              : rule.severity === 'medium'
+                              ? 'bg-yellow-900/50 text-yellow-400'
+                              : 'bg-blue-900/50 text-blue-400'
+                          }`}
+                        >
+                          {rule.severity}
+                        </span>
+                      </div>
+                      <p className="text-dark-400 text-sm mt-1">{rule.reason}</p>
+                    </div>
+                    <div className="text-dark-400 text-sm">
+                      +{(rule.score * 100).toFixed(0)}%
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
