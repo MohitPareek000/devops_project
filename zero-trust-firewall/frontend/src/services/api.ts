@@ -113,26 +113,6 @@ export const threatAPI = {
     api.get('/threats/top-blocked', { params: { limit, days } }),
 };
 
-// Network Monitoring API
-export const networkAPI = {
-  getConnections: (params?: {
-    page?: number;
-    page_size?: number;
-    is_blocked?: boolean;
-    protocol?: string;
-  }) => api.get('/network/connections', { params }),
-  getStats: (hours?: number) => api.get('/network/stats', { params: { hours } }),
-  getRealTime: () => api.get('/network/real-time'),
-  blockIP: (ip: string, reason?: string) =>
-    api.post(`/network/block/${ip}`, null, { params: { reason } }),
-  unblockIP: (ip: string) => api.post(`/network/unblock/${ip}`),
-  getBlocked: () => api.get('/network/blocked'),
-  getProtocols: (hours?: number) => api.get('/network/protocols', { params: { hours } }),
-  getTopDestinations: (limit?: number, hours?: number) =>
-    api.get('/network/top-destinations', { params: { limit, hours } }),
-  getBandwidth: (hours?: number) => api.get('/network/bandwidth', { params: { hours } }),
-};
-
 // Dashboard API
 export const dashboardAPI = {
   getStats: (days?: number) => api.get('/dashboard/stats', { params: { days } }),

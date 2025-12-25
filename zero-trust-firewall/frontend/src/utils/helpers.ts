@@ -1,15 +1,28 @@
 import { format, formatDistanceToNow } from 'date-fns';
 
+/**
+ * Parse a date that comes from the backend (stored as UTC but without timezone indicator).
+ * Appends 'Z' to ensure it's interpreted as UTC, then converts to local time.
+ */
+const parseUTCDate = (date: string | Date): Date => {
+  if (date instanceof Date) return date;
+  // If the date string doesn't have timezone info, treat it as UTC
+  if (!date.includes('Z') && !date.includes('+') && !date.includes('-', 10)) {
+    return new Date(date + 'Z');
+  }
+  return new Date(date);
+};
+
 export const formatDate = (date: string | Date) => {
-  return format(new Date(date), 'MMM dd, yyyy HH:mm');
+  return format(parseUTCDate(date), 'MMM dd, yyyy HH:mm');
 };
 
 export const formatDateShort = (date: string | Date) => {
-  return format(new Date(date), 'MMM dd, HH:mm');
+  return format(parseUTCDate(date), 'MMM dd, HH:mm');
 };
 
 export const formatRelativeTime = (date: string | Date) => {
-  return formatDistanceToNow(new Date(date), { addSuffix: true });
+  return formatDistanceToNow(parseUTCDate(date), { addSuffix: true });
 };
 
 export const formatBytes = (bytes: number) => {

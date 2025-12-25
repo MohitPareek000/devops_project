@@ -8,7 +8,6 @@ import {
   DashboardPage,
   ScannerPage,
   ThreatsPage,
-  NetworkPage,
   AlertsPage,
   UsersPage,
   SettingsPage,
@@ -80,7 +79,6 @@ const App: React.FC = () => {
         <Route index element={<DashboardPage />} />
         <Route path="scanner" element={<ScannerPage />} />
         <Route path="threats" element={<ThreatsPage />} />
-        <Route path="network" element={<NetworkPage />} />
         <Route path="alerts" element={<AlertsPage />} />
         <Route
           path="users"

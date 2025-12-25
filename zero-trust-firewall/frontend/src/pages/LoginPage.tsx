@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ShieldCheck, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -38,7 +38,7 @@ const LoginPage: React.FC = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4">
             <ShieldCheck className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white">Zero Trust Firewall</h1>
+          <h1 className="text-2xl font-bold text-white">Phishing Master</h1>
           <p className="text-dark-400 mt-2">Sign in to your account</p>
         </div>
 
@@ -91,21 +91,15 @@ const LoginPage: React.FC = () => {
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-dark-400 text-sm">
-              Don't have an account?{' '}
-              <Link to="/register" className="text-blue-400 hover:text-blue-300">
-                Create one
-              </Link>
-            </p>
-          </div>
         </div>
 
         {/* Demo credentials */}
-        <div className="mt-6 p-4 bg-dark-800/50 rounded-xl border border-dark-700">
+        <div className="mt-6 p-4 bg-dark-800/50 rounded-xl border border-dark-700 space-y-2">
           <p className="text-dark-400 text-sm text-center">
-            Demo credentials: <span className="text-white">admin</span> /{' '}
-            <span className="text-white">admin123</span>
+            Admin: <span className="text-white">admin</span> / <span className="text-white">admin123</span>
+          </p>
+          <p className="text-dark-400 text-sm text-center">
+            Test: <span className="text-white">test</span> / <span className="text-white">test123</span>
           </p>
         </div>
       </div>

@@ -4,7 +4,6 @@ import {
   LayoutDashboard,
   Search,
   Shield,
-  Activity,
   Bell,
   Settings,
   Users,
@@ -17,7 +16,6 @@ const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'URL Scanner', href: '/scanner', icon: Search },
   { name: 'Threat Log', href: '/threats', icon: Shield },
-  { name: 'Network Monitor', href: '/network', icon: Activity },
   { name: 'Alerts', href: '/alerts', icon: Bell },
 ];
 
@@ -37,8 +35,8 @@ const Sidebar: React.FC = () => {
           <ShieldCheck className="w-6 h-6 text-white" />
         </div>
         <div>
-          <h1 className="text-lg font-bold text-white">Zero Trust</h1>
-          <p className="text-xs text-dark-400">Firewall</p>
+          <h1 className="text-lg font-bold text-white">Phishing</h1>
+          <p className="text-xs text-dark-400">Master</p>
         </div>
       </div>
 

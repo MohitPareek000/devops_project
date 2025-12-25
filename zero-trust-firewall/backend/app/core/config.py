@@ -5,7 +5,7 @@ import secrets
 
 class Settings(BaseSettings):
     # Application
-    APP_NAME: str = "Zero Trust Firewall"
+    APP_NAME: str = "Phishing Master"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = False
 
@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     SMTP_PORT: int = 587
     SMTP_USER: str = ""
     SMTP_PASSWORD: str = ""
-    EMAIL_FROM: str = "alerts@zerotrust.local"
+    EMAIL_FROM: str = "alerts@phishingmaster.local"
 
     # WebSocket
     WS_HEARTBEAT_INTERVAL: int = 30

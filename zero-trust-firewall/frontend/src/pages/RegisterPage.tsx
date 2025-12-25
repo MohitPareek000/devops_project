@@ -58,7 +58,7 @@ const RegisterPage: React.FC = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4">
             <ShieldCheck className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white">Zero Trust Firewall</h1>
+          <h1 className="text-2xl font-bold text-white">Phishing Master</h1>
           <p className="text-dark-400 mt-2">Create your account</p>
         </div>
 
