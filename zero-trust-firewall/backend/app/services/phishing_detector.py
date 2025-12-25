@@ -6,19 +6,23 @@ import tldextract
 from .url_analyzer import url_analyzer
 from .rule_engine import rule_engine
 from .ml_detector import ml_detector
+from .bert_detector import bert_detector
 from .threat_intel import threat_intel
 from app.models.threat import URLScan, ThreatSeverity, ThreatStatus, Alert
 from app.core.config import settings
 
 
 class PhishingDetector:
-    """Main phishing detection orchestrator combining ML, rules, and threat intel."""
+    """Main phishing detection orchestrator combining ML, BERT, rules, and threat intel."""
 
     def __init__(self):
-        # Adjusted weights: Rules are more reliable for pattern-based attacks
-        # ML is better for catching novel patterns
-        self.ml_weight = 0.45
-        self.rule_weight = 0.55
+        # Hybrid weights for combining all detection methods
+        # BERT/Deep Learning: Best for semantic understanding and typosquatting
+        # RandomForest ML: Good for statistical patterns
+        # Rules: Deterministic detection of known patterns
+        self.bert_weight = 0.35  # Deep learning score
+        self.ml_weight = 0.25   # Traditional ML score
+        self.rule_weight = 0.40  # Rule-based score (highest for reliability)
 
     def analyze_url(
         self,
@@ -67,6 +71,7 @@ class PhishingDetector:
                 confidence_score=1.0,
                 ml_score=1.0,
                 rule_score=1.0,
+                bert_score=1.0,
                 severity='critical',
                 status='blocked',
                 features={},
@@ -82,14 +87,14 @@ class PhishingDetector:
         # Extract features
         feature_vector, features = url_analyzer.get_feature_vector(url)
 
-        # Run ML detection
+        # Run all detection methods
         ml_result = ml_detector.predict(url)
-
-        # Run rule-based detection
+        bert_result = bert_detector.predict(url)
         rule_result = rule_engine.analyze(url, features)
 
-        # Combine scores
+        # Hybrid scoring: Combine all three methods
         combined_score = (
+            bert_result['combined_score'] * self.bert_weight +
             ml_result['ml_score'] * self.ml_weight +
             rule_result['rule_score'] * self.rule_weight
         )
