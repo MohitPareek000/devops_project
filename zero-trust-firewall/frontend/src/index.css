@@ -120,6 +120,29 @@
   animation: fadeIn 0.3s ease-out;
 }
 
+/* Logo scroll animation */
+@keyframes scrollLogos {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-logos {
+  animation: scrollLogos 35s linear infinite;
+  width: max-content;
+}
+
+.logo-carousel-container:hover .animate-scroll-logos {
+  animation-play-state: paused;
+}
+
+.logo-item {
+  transition: all 0.3s ease;
+}
+
 /* Gradient backgrounds */
 .gradient-threat {
   background: linear-gradient(135deg, #dc2626 0%, #ea580c 50%, #ca8a04 100%);

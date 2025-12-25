@@ -9,7 +9,6 @@ from app.core.security import get_current_user
 from app.models.user import User
 from app.models.threat import URLScan, Alert, NetworkConnection, ThreatIntel
 from app.schemas.threat import DashboardResponse, DashboardStats, ThreatTrend, URLScanResponse
-from app.services.network_monitor import network_monitor
 from app.services.threat_intel import threat_intel
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
@@ -245,9 +244,6 @@ async def get_system_health(
     # Get threat intel status
     intel_stats = threat_intel.get_stats()
 
-    # Get network monitor status
-    network_stats = network_monitor.get_connection_stats()
-
     # Count recent errors (last hour)
     last_hour = datetime.utcnow() - timedelta(hours=1)
     recent_critical = db.query(Alert).filter(
@@ -263,11 +259,6 @@ async def get_system_health(
             'blacklist_size': intel_stats['blacklist_count'],
             'whitelist_size': intel_stats['whitelist_count'],
             'last_update': intel_stats['last_update']
-        },
-        'network_monitor': {
-            'status': 'healthy',
-            'active_connections': network_stats['active_count'],
-            'blocked_ips': network_stats['blocked_count']
         },
         'alerts': {
             'critical_last_hour': recent_critical
