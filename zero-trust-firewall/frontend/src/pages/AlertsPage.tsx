@@ -119,8 +119,8 @@ const AlertsPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Alerts</h1>
-          <p className="text-dark-400 mt-1">Security alerts and notifications</p>
+          <h1 className="text-2xl font-bold text-gray-900">Alerts</h1>
+          <p className="text-gray-500 mt-1">Security alerts and notifications</p>
         </div>
         <div className="flex gap-2">
           <button onClick={handleMarkAllRead} className="btn btn-secondary flex items-center gap-2">
@@ -138,22 +138,22 @@ const AlertsPage: React.FC = () => {
       {counts && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="card text-center">
-            <p className="text-3xl font-bold text-white">{counts.total}</p>
-            <p className="text-dark-400 text-sm">Total Alerts</p>
+            <p className="text-3xl font-bold text-gray-900">{counts.total}</p>
+            <p className="text-gray-500 text-sm">Total Alerts</p>
           </div>
           <div className="card text-center">
-            <p className="text-3xl font-bold text-blue-400">{counts.unread}</p>
-            <p className="text-dark-400 text-sm">Unread</p>
+            <p className="text-3xl font-bold text-blue-600">{counts.unread}</p>
+            <p className="text-gray-500 text-sm">Unread</p>
           </div>
           <div className="card text-center">
-            <p className="text-3xl font-bold text-yellow-400">{counts.unacknowledged}</p>
-            <p className="text-dark-400 text-sm">Pending</p>
+            <p className="text-3xl font-bold text-yellow-600">{counts.unacknowledged}</p>
+            <p className="text-gray-500 text-sm">Pending</p>
           </div>
           <div className="card text-center">
-            <p className="text-3xl font-bold text-red-400">
+            <p className="text-3xl font-bold text-red-600">
               {counts.by_severity?.critical || 0}
             </p>
-            <p className="text-dark-400 text-sm">Critical</p>
+            <p className="text-gray-500 text-sm">Critical</p>
           </div>
         </div>
       )}
@@ -161,8 +161,8 @@ const AlertsPage: React.FC = () => {
       {/* Filters */}
       <div className="card">
         <div className="flex items-center gap-2 mb-4">
-          <Filter className="w-5 h-5 text-dark-400" />
-          <h3 className="font-medium text-white">Filters</h3>
+          <Filter className="w-5 h-5 text-gray-400" />
+          <h3 className="font-medium text-gray-900">Filters</h3>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
@@ -249,7 +249,7 @@ const AlertsPage: React.FC = () => {
           {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex items-center justify-between">
-              <p className="text-dark-400 text-sm">
+              <p className="text-gray-500 text-sm">
                 Page {page} of {totalPages}
               </p>
               <div className="flex gap-2">

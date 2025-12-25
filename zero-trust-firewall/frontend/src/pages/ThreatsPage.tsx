@@ -73,8 +73,8 @@ const ThreatsPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Threat Log</h1>
-          <p className="text-dark-400 mt-1">View and manage scanned URLs</p>
+          <h1 className="text-2xl font-bold text-gray-900">Threat Log</h1>
+          <p className="text-gray-500 mt-1">View and manage scanned URLs</p>
         </div>
         <button
           onClick={fetchThreats}
@@ -89,7 +89,7 @@ const ThreatsPage: React.FC = () => {
       <div className="card">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
               placeholder="Search by URL or domain..."
@@ -108,7 +108,7 @@ const ThreatsPage: React.FC = () => {
         </div>
 
         {showFilters && (
-          <div className="mt-4 pt-4 border-t border-dark-700 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="mt-4 pt-4 border-t border-gray-200 grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="label">Severity</label>
               <select
@@ -165,7 +165,7 @@ const ThreatsPage: React.FC = () => {
           {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex items-center justify-between">
-              <p className="text-dark-400 text-sm">
+              <p className="text-gray-500 text-sm">
                 Page {page} of {totalPages}
               </p>
               <div className="flex gap-2">

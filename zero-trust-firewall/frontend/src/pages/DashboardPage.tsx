@@ -66,8 +66,8 @@ const DashboardPage: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-        <p className="text-dark-400 mt-1">Security overview and threat monitoring</p>
+        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+        <p className="text-gray-500 mt-1">Security overview and threat monitoring</p>
       </div>
 
       {/* Stats Grid */}
@@ -121,19 +121,19 @@ const DashboardPage: React.FC = () => {
       <div className="card">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-white">Detection Rate</h3>
-            <p className="text-dark-400 text-sm mt-1">
+            <h3 className="text-lg font-semibold text-gray-900">Detection Rate</h3>
+            <p className="text-gray-500 text-sm mt-1">
               Percentage of scanned URLs identified as phishing
             </p>
           </div>
           <div className="text-right">
-            <p className="text-4xl font-bold text-white">
+            <p className="text-4xl font-bold text-gray-900">
               {stats?.detection_rate?.toFixed(1) || 0}%
             </p>
-            <p className="text-dark-400 text-sm">Last 7 days</p>
+            <p className="text-gray-500 text-sm">Last 7 days</p>
           </div>
         </div>
-        <div className="h-3 bg-dark-700 rounded-full mt-4 overflow-hidden">
+        <div className="h-3 bg-gray-200 rounded-full mt-4 overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 rounded-full transition-all duration-1000"
             style={{ width: `${Math.min(stats?.detection_rate || 0, 100)}%` }}

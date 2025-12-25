@@ -74,11 +74,11 @@ const UsersPage: React.FC = () => {
   const getRoleBadgeClass = (role: string) => {
     switch (role) {
       case 'admin':
-        return 'bg-red-900/50 text-red-400 border-red-800';
+        return 'bg-red-100 text-red-700 border-red-200';
       case 'analyst':
-        return 'bg-blue-900/50 text-blue-400 border-blue-800';
+        return 'bg-blue-100 text-blue-700 border-blue-200';
       default:
-        return 'bg-gray-900/50 text-gray-400 border-gray-700';
+        return 'bg-gray-100 text-gray-700 border-gray-200';
     }
   };
 
@@ -95,8 +95,8 @@ const UsersPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">User Management</h1>
-          <p className="text-dark-400 mt-1">Manage system users and their roles</p>
+          <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
+          <p className="text-gray-500 mt-1">Manage system users and their roles</p>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
@@ -111,23 +111,23 @@ const UsersPage: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="card">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-blue-500/20 rounded-xl">
-              <Users className="w-6 h-6 text-blue-400" />
+            <div className="p-3 bg-blue-100 rounded-xl">
+              <Users className="w-6 h-6 text-blue-600" />
             </div>
             <div>
-              <p className="text-dark-400 text-sm">Total Users</p>
-              <p className="text-2xl font-bold text-white">{users.length}</p>
+              <p className="text-gray-500 text-sm">Total Users</p>
+              <p className="text-2xl font-bold text-gray-900">{users.length}</p>
             </div>
           </div>
         </div>
         <div className="card">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-green-500/20 rounded-xl">
-              <ShieldCheck className="w-6 h-6 text-green-400" />
+            <div className="p-3 bg-green-100 rounded-xl">
+              <ShieldCheck className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <p className="text-dark-400 text-sm">Active Users</p>
-              <p className="text-2xl font-bold text-white">
+              <p className="text-gray-500 text-sm">Active Users</p>
+              <p className="text-2xl font-bold text-gray-900">
                 {users.filter((u) => u.is_active).length}
               </p>
             </div>
@@ -135,12 +135,12 @@ const UsersPage: React.FC = () => {
         </div>
         <div className="card">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-red-500/20 rounded-xl">
-              <ShieldAlert className="w-6 h-6 text-red-400" />
+            <div className="p-3 bg-red-100 rounded-xl">
+              <ShieldAlert className="w-6 h-6 text-red-600" />
             </div>
             <div>
-              <p className="text-dark-400 text-sm">Admins</p>
-              <p className="text-2xl font-bold text-white">
+              <p className="text-gray-500 text-sm">Admins</p>
+              <p className="text-2xl font-bold text-gray-900">
                 {users.filter((u) => u.role === 'admin').length}
               </p>
             </div>
@@ -162,7 +162,7 @@ const UsersPage: React.FC = () => {
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-dark-700">
+            <tbody className="divide-y divide-gray-200">
               {users.map((user) => (
                 <tr key={user.id}>
                   <td>
@@ -173,8 +173,8 @@ const UsersPage: React.FC = () => {
                         </span>
                       </div>
                       <div>
-                        <p className="font-medium text-white">{user.username}</p>
-                        <p className="text-dark-400 text-sm">{user.email}</p>
+                        <p className="font-medium text-gray-900">{user.username}</p>
+                        <p className="text-gray-500 text-sm">{user.email}</p>
                       </div>
                     </div>
                   </td>
@@ -195,29 +195,29 @@ const UsersPage: React.FC = () => {
                       onClick={() => handleToggleActive(user)}
                       className={`px-2 py-1 rounded-full text-xs font-medium ${
                         user.is_active
-                          ? 'bg-green-900/50 text-green-400'
-                          : 'bg-red-900/50 text-red-400'
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-red-100 text-red-700'
                       }`}
                     >
                       {user.is_active ? 'Active' : 'Inactive'}
                     </button>
                   </td>
-                  <td className="text-dark-400">
+                  <td className="text-gray-500">
                     {user.last_login ? formatDate(user.last_login) : 'Never'}
                   </td>
-                  <td className="text-dark-400">{formatDate(user.created_at)}</td>
+                  <td className="text-gray-500">{formatDate(user.created_at)}</td>
                   <td>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => setEditingUser(user)}
-                        className="p-1.5 text-dark-400 hover:text-white hover:bg-dark-700 rounded-lg transition-colors"
+                        className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
                         title="Edit"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(user.id)}
-                        className="p-1.5 text-dark-400 hover:text-red-400 hover:bg-dark-700 rounded-lg transition-colors"
+                        className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-gray-100 rounded-lg transition-colors"
                         title="Delete"
                       >
                         <Trash2 className="w-4 h-4" />

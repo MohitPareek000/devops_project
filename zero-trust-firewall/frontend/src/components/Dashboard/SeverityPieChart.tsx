@@ -29,15 +29,15 @@ const SeverityPieChart: React.FC<SeverityPieChartProps> = ({ data }) => {
       const data = payload[0];
       const percentage = ((data.value / total) * 100).toFixed(1);
       return (
-        <div className="bg-dark-800 border border-dark-600 rounded-lg p-3 shadow-xl">
+        <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-xl">
           <div className="flex items-center gap-2">
             <div
               className="w-3 h-3 rounded-full"
               style={{ backgroundColor: data.payload.color }}
             />
-            <span className="text-white font-medium">{data.name}</span>
+            <span className="text-gray-900 font-medium">{data.name}</span>
           </div>
-          <p className="text-dark-300 text-sm mt-1">
+          <p className="text-gray-600 text-sm mt-1">
             {data.value} threats ({percentage}%)
           </p>
         </div>
@@ -51,14 +51,14 @@ const SeverityPieChart: React.FC<SeverityPieChartProps> = ({ data }) => {
       <text
         x={cx}
         y={cy}
-        fill="#fff"
+        fill="#111827"
         textAnchor="middle"
         dominantBaseline="central"
       >
         <tspan x={cx} y={cy - 10} className="text-2xl font-bold">
           {total}
         </tspan>
-        <tspan x={cx} y={cy + 15} className="text-sm fill-gray-400">
+        <tspan x={cx} y={cy + 15} className="text-sm fill-gray-500">
           Threats
         </tspan>
       </text>
@@ -67,7 +67,7 @@ const SeverityPieChart: React.FC<SeverityPieChartProps> = ({ data }) => {
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold text-white mb-4">Severity Distribution</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Severity Distribution</h3>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
@@ -89,7 +89,7 @@ const SeverityPieChart: React.FC<SeverityPieChartProps> = ({ data }) => {
             <Tooltip content={<CustomTooltip />} />
             <Legend
               formatter={(value) => (
-                <span className="text-dark-300 text-sm">{value}</span>
+                <span className="text-gray-600 text-sm">{value}</span>
               )}
             />
           </PieChart>

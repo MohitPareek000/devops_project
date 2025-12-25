@@ -47,21 +47,21 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   };
 
   return (
-    <header className="bg-dark-900 border-b border-dark-700 px-6 py-4">
+    <header className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
             onClick={onMenuClick}
-            className="lg:hidden p-2 text-dark-400 hover:text-white hover:bg-dark-800 rounded-lg"
+            className="lg:hidden p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg"
           >
             <Menu className="w-5 h-5" />
           </button>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
               placeholder="Search threats, URLs, IPs..."
-              className="w-80 pl-10 pr-4 py-2 bg-dark-800 border border-dark-600 rounded-lg text-white placeholder-dark-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-80 pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -71,7 +71,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           <div className="relative">
             <button
               onClick={() => setShowAlerts(!showAlerts)}
-              className="relative p-2 text-dark-400 hover:text-white hover:bg-dark-800 rounded-lg transition-colors"
+              className="relative p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <Bell className="w-5 h-5" />
               {unreadCount > 0 && (
@@ -83,27 +83,27 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
 
             {/* Alert dropdown */}
             {showAlerts && (
-              <div className="absolute right-0 mt-2 w-80 bg-dark-800 border border-dark-700 rounded-xl shadow-xl z-50">
-                <div className="px-4 py-3 border-b border-dark-700">
-                  <h3 className="font-semibold text-white">Notifications</h3>
-                  <p className="text-sm text-dark-400">{unreadCount} unread alerts</p>
+              <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-xl shadow-xl z-50">
+                <div className="px-4 py-3 border-b border-gray-200">
+                  <h3 className="font-semibold text-gray-900">Notifications</h3>
+                  <p className="text-sm text-gray-500">{unreadCount} unread alerts</p>
                 </div>
                 <div className="max-h-96 overflow-y-auto">
                   {alerts.length === 0 ? (
-                    <div className="px-4 py-6 text-center text-dark-400">
+                    <div className="px-4 py-6 text-center text-gray-400">
                       No new alerts
                     </div>
                   ) : (
                     alerts.map((alert) => (
                       <div
                         key={alert.id}
-                        className="px-4 py-3 hover:bg-dark-700 transition-colors cursor-pointer"
+                        className="px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer"
                       >
                         <div className="flex items-start gap-3">
                           <div className={`w-2 h-2 mt-2 rounded-full ${getSeverityDot(alert.severity)}`} />
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm text-white truncate">{alert.title}</p>
-                            <p className="text-xs text-dark-400">
+                            <p className="text-sm text-gray-900 truncate">{alert.title}</p>
+                            <p className="text-xs text-gray-500">
                               {formatRelativeTime(alert.created_at)}
                             </p>
                           </div>
@@ -112,10 +112,10 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                     ))
                   )}
                 </div>
-                <div className="px-4 py-3 border-t border-dark-700">
+                <div className="px-4 py-3 border-t border-gray-200">
                   <a
                     href="/alerts"
-                    className="text-sm text-blue-400 hover:text-blue-300"
+                    className="text-sm text-blue-600 hover:text-blue-700"
                   >
                     View all alerts
                   </a>
@@ -125,9 +125,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           </div>
 
           {/* Status indicator */}
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-green-900/30 border border-green-800 rounded-full">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 border border-green-200 rounded-full">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            <span className="text-sm text-green-400 font-medium">Protected</span>
+            <span className="text-sm text-green-600 font-medium">Protected</span>
           </div>
         </div>
       </div>

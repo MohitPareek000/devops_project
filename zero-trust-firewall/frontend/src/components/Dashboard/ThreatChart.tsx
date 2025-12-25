@@ -23,16 +23,16 @@ const ThreatChart: React.FC<ThreatChartProps> = ({ data }) => {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-dark-800 border border-dark-600 rounded-lg p-3 shadow-xl">
-          <p className="text-dark-300 text-sm mb-2">{label}</p>
+        <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-xl">
+          <p className="text-gray-600 text-sm mb-2">{label}</p>
           {payload.map((entry: any, index: number) => (
             <div key={index} className="flex items-center gap-2">
               <div
                 className="w-3 h-3 rounded-full"
                 style={{ backgroundColor: entry.color }}
               />
-              <span className="text-dark-400 text-sm">{entry.name}:</span>
-              <span className="text-white text-sm font-medium">{entry.value}</span>
+              <span className="text-gray-500 text-sm">{entry.name}:</span>
+              <span className="text-gray-900 text-sm font-medium">{entry.value}</span>
             </div>
           ))}
         </div>
@@ -43,7 +43,7 @@ const ThreatChart: React.FC<ThreatChartProps> = ({ data }) => {
 
   return (
     <div className="card">
-      <h3 className="text-lg font-semibold text-white mb-4">Threat Trends</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Threat Trends</h3>
       <div className="h-80">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data}>
@@ -61,13 +61,13 @@ const ThreatChart: React.FC<ThreatChartProps> = ({ data }) => {
                 <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis
               dataKey="date"
-              stroke="#64748b"
-              tick={{ fill: '#94a3b8', fontSize: 12 }}
+              stroke="#9ca3af"
+              tick={{ fill: '#6b7280', fontSize: 12 }}
             />
-            <YAxis stroke="#64748b" tick={{ fill: '#94a3b8', fontSize: 12 }} />
+            <YAxis stroke="#9ca3af" tick={{ fill: '#6b7280', fontSize: 12 }} />
             <Tooltip content={<CustomTooltip />} />
             <Legend
               wrapperStyle={{
